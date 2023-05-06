@@ -48,9 +48,9 @@ const getRandomComputerMove = (gameBoard) => {
   return validMoves[rndMove];
 };
 
-const getPosition = (gameBoard, moveChecks) => {
+const getPosition = ({ gameBoard, moveChecks }) => {
   for (let check = 0; check < moveChecks.length; check++) {
-    for (let i = 0; 1 < moveChecks[check].max; i += moveChecks[check].step) {
+    for (let i = 0; i < moveChecks[check].max; i += moveChecks[check].step) {
       let series =
         gameBoard[1 + moveChecks[check].indexes[0]].toString() +
         gameBoard[1 + moveChecks[check].indexes[1]].toString() +
@@ -63,20 +63,19 @@ const getPosition = (gameBoard, moveChecks) => {
           return 1 + moveChecks[check].indexes[3];
         case "1101":
         case "2202":
-          1 + moveChecks[check].indexes[1];
           return 1 + moveChecks[check].indexes[2];
         case "1011":
         case "2022":
-          1 + moveChecks[check].indexes[1];
           return 1 + moveChecks[check].indexes[1];
         case "0111":
         case "0222":
-          1 + moveChecks[check].indexes[1];
           return 1 + moveChecks[check].indexes[0];
         default:
+          break;
       }
     }
   }
+  return -1;
 };
 
 export const getComputerMove = (gameBoard) => {
@@ -102,4 +101,7 @@ export const getComputerMove = (gameBoard) => {
       step: 16,
     },
   ];
+  let position = getPosition(gameBoard, moveChecks);
+  if (position > -1) return position;
+  return getRandomComputerMove(gameBoard);
 };
